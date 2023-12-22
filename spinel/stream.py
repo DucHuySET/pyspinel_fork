@@ -60,6 +60,9 @@ class StreamSerial(IStream):
             raise
 
     def write(self, data):
+        # print( "1     " + str(data))
+        # print("2     " +"TX Raw: " +
+        #                         binascii.hexlify(data).decode('utf-8'))
         self.serial.write(data)
         if CONFIG.DEBUG_STREAM_TX:
             CONFIG.LOGGER.debug("TX Raw: " +
@@ -67,6 +70,9 @@ class StreamSerial(IStream):
 
     def read(self, size=1):
         pkt = self.serial.read(size)
+        # print("3     " +str(pkt))
+        # print( "4     " +"RX Raw: " +
+        #                         binascii.hexlify(pkt).decode('utf-8'))
         if CONFIG.DEBUG_STREAM_RX:
             CONFIG.LOGGER.debug("RX Raw: " +
                                 binascii.hexlify(pkt).decode('utf-8'))

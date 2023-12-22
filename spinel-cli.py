@@ -277,7 +277,9 @@ class IPv6Factory(object):
                 )
             )
         )
-
+        #TODO: remove tobytes
+        print(coap_request)
+        print(coap_request.to_bytes())
         return coap_request.to_bytes()
 
     def from_bytes(self, data):

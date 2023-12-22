@@ -40,6 +40,8 @@ from spinel.const import SPINEL
 from spinel.const import SPINEL_LAST_STATUS_MAP
 from spinel.hdlc import Hdlc
 
+import time
+
 FEATURE_USE_HDLC = 1
 
 TIMEOUT_PROP = 5
@@ -815,6 +817,8 @@ class WpanApi(SpinelCodec):
 
         if self.use_hdlc:
             pkt = self.hdlc.encode(pkt)
+        print("transact section")
+        print(pkt)
         self.stream_tx(pkt)
 
     def parse_rx(self, pkt):
@@ -856,6 +860,8 @@ class WpanApi(SpinelCodec):
                                binascii.hexlify(payload).decode('utf-8'))
 
     def stream_tx(self, pkt):
+        self.tx_time = time.time()
+        print("\nstart tx: " + str(self.tx_time))
         # Encapsulate lagging and Framer support in self.stream class.
         self.stream.write(pkt)
 
@@ -865,6 +871,9 @@ class WpanApi(SpinelCodec):
             while self._reader_alive:
                 if self.use_hdlc:
                     self.rx_pkt = self.hdlc.collect()
+                    self.rx_time = time.time()
+                    print("\nstart rx: " + str(self.rx_time))
+                    print( "\ntx to rx time:" + str(self.rx_time - self.tx_time))
                 else:
                     # size=None: Assume stream will always deliver packets
                     pkt = self.stream.read(None)
